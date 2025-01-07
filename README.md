@@ -45,6 +45,9 @@ lox-in-rust/
 │   │   ├── table.rs        # Implements hash tables for variable storage
 │   │   └── mod.rs          # Exports VM modules
 │   └── main.rs             # Main entry point for the entire project
+├── tests/                  # Integration tests directory
+│   ├── interpreter_tests.rs # Integration tests for the interpreter
+│   └── vm_tests.rs          # Integration tests for the VM
 ├── Cargo.toml              # Rust project configuration
 ├── LICENSE                 # License file (MIT)
 └── README.md               # Project documentation
