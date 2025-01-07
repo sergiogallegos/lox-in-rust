@@ -77,7 +77,7 @@ vm::vm::run();
 3. Run tests:
 cargo test
 
-
+---
 
 ## License
 This project is licensed under the MIT License. It is inspired by the *Crafting Interpreters* book, and the original ideas belong to Robert Nystrom.
