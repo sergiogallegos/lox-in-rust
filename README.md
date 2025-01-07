@@ -48,6 +48,7 @@ lox-in-rust/
 ├── Cargo.toml              # Rust project configuration
 ├── LICENSE                 # License file (MIT)
 └── README.md               # Project documentation
+```
 
 ---
 
