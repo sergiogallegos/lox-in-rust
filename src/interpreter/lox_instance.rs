@@ -37,7 +37,7 @@ impl LoxInstance {
         // If not found, throw a runtime error
         panic!(
             "{}",
-            RuntimeError::new(name, &format!("Undefined property '{}'.", name.lexeme))
+            RuntimeError::new(name.clone(), format!("Undefined property '{}'.", name.lexeme))
         );
     }
 

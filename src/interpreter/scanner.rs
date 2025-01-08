@@ -168,7 +168,7 @@ impl Scanner {
     }
 
     fn add_token(&mut self, token_type: TokenType) {
-        self.add_token_with_literal(token_type, None);
+        self.add_token_with_literal(token_type, None::<T>);
     }
 
     fn add_token_with_literal(&mut self, token_type: TokenType, literal: Option<impl Into<serde_json::Value>>) {

@@ -85,7 +85,7 @@ impl Lox {
         let tokens = match scanner.scan_tokens() {
             Ok(tokens) => tokens,
             Err(err) => {
-                self.error(err.line, &err.message);
+                eprintln!("Error scanning tokens: {}", err);
                 return;
             }
         };
@@ -107,7 +107,7 @@ impl Lox {
         // Resolve the statements
         let mut resolver = Resolver::new(&mut self.interpreter);
         if let Err(err) = resolver.resolve(&statements) {
-            self.error(err.line, &err.message);
+            eprintln!("Error resolving statements: {}", err);
             return;
         }
 

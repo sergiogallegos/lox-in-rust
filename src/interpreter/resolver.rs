@@ -1,6 +1,8 @@
 use std::collections::{HashMap, VecDeque};
 use crate::interpreter::{expr::Expr, stmt::Stmt, token::Token};
 use crate::interpreter::{lox::Lox, interpreter::Interpreter};
+use crate::interpreter::expr::ExprVisitor;
+use crate::interpreter::stmt::StmtVisitor;
 
 pub struct Resolver<'a> {
     interpreter: &'a mut Interpreter,

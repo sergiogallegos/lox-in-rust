@@ -1,7 +1,7 @@
 use std::fmt;
+use std::rc::Rc;
 
 #[derive(Debug, Clone, PartialEq)]
-
 pub enum Object {
     Number(f64),
     String(String),
@@ -9,13 +9,14 @@ pub enum Object {
     Nil,
 }
 
+#[derive(Debug, Clone)]
 pub enum Value {
     Number(f64),
     String(String),
     Boolean(bool),
     Nil,
     Callable(Box<dyn crate::interpreter::lox_callable::LoxCallable>),
-    Instance(crate::interpreter::lox_instance::LoxInstance),
+    Instance(Rc<crate::interpreter::lox_instance::LoxInstance>),
 }
 
 impl fmt::Display for Value {

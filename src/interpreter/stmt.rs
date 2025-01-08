@@ -13,6 +13,7 @@ pub trait StmtVisitor<R> {
     fn visit_while_stmt(&mut self, stmt: &StmtWhile) -> R;
 }
 
+#[derive(Debug)]
 pub enum Stmt {
     Block(StmtBlock),
     Class(StmtClass),

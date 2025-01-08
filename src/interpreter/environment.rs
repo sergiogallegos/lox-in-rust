@@ -48,7 +48,7 @@ impl Environment {
             return enclosing.borrow().get(name);
         }
 
-        panic!("{}", RuntimeError::new(name, &format!("Undefined variable '{}'.", name.lexeme)));
+        panic!("{}", RuntimeError::new(name.clone(), format!("Undefined variable '{}'.", name.lexeme)));
     }
 
     /// Assigns a value to an existing variable.
@@ -63,7 +63,7 @@ impl Environment {
             return;
         }
 
-        panic!("{}", RuntimeError::new(name, &format!("Undefined variable '{}'.", name.lexeme)));
+        panic!("{}", RuntimeError::new(name.clone(), format!("Undefined variable '{}'.", name.lexeme)));
     }
 
     /// Defines a new variable in the current environment.
