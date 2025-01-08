@@ -1,4 +1,3 @@
-pub mod ast;
 pub mod ast_printer;
 pub mod environment;
 pub mod interpreter;
@@ -15,4 +14,5 @@ pub mod scanner;
 pub mod stmt;
 pub mod token;
 pub mod token_type;
-
+pub mod expr;
+pub mod value;
