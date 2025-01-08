@@ -3,7 +3,7 @@ use crate::interpreter::interpreter::Interpreter;
 use std::fmt;
 
 /// Represents a callable function or class in the Lox language.
-pub trait LoxCallable: fmt::Debug {
+pub trait LoxCallable: dyn_clone::DynClone + std::fmt::Debug {
     /// Returns the number of arguments the callable expects.
     fn arity(&self) -> usize;
 
@@ -15,6 +15,8 @@ pub trait LoxCallable: fmt::Debug {
         "<native fn>".to_string()
     }
 }
+
+dyn_clone::clone_trait_object!(LoxCallable);
 
 /// A concrete implementation of LoxCallable for native functions.
 #[derive(Debug, Clone)]
