@@ -42,6 +42,13 @@ impl Stmt {
     }
 }
 
+impl StmtFunction {
+    pub fn accept<R>(&self, visitor: &mut dyn StmtVisitor<R>) -> R {
+        visitor.visit_function_stmt(self)
+    }
+}
+
+
 // Nested Stmt structs
 
 #[derive(Debug)]

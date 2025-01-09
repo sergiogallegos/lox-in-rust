@@ -1,3 +1,4 @@
+use std::fmt;
 use crate::interpreter::token::Token;
 use crate::interpreter::value::Object;
 
@@ -10,7 +11,11 @@ pub enum Expr {
     Literal { value: Option<Object> },
     Logical { left: Box<Expr>, operator: Token, right: Box<Expr> },
     Unary { operator: Token, right: Box<Expr> },
-    Variable { name: Token },
+    Variable { name: Token },    
+    Get { object: Box<Expr>, name: Token },
+    Set { object: Box<Expr>, name: Token, value: Box<Expr> },
+    Super { method: Token },
+    This,
 }
 
 pub trait ExprVisitor<R> {
@@ -39,6 +44,29 @@ impl Expr {
             Expr::Logical { .. } => visitor.visit_logical_expr(self),
             Expr::Unary { .. } => visitor.visit_unary_expr(self),
             Expr::Variable { .. } => visitor.visit_variable_expr(self),
+            Expr::Get { .. } => visitor.visit_get_expr(self),
+            Expr::Set { .. } => visitor.visit_set_expr(self),
+            Expr::Super { .. } => visitor.visit_super_expr(self),
+            Expr::This => visitor.visit_this_expr(self),
+        }
+    }
+}
+
+impl fmt::Display for Expr {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Expr::Assign { name, value } => write!(f, "Assign({}, {})", name.lexeme, value),
+            Expr::Binary { left, operator, right } => write!(f, "Binary({}, {}, {})", left, operator, right),
+            Expr::Call { callee, arguments } => write!(f, "Call({}, {:?})", callee, arguments),
+            Expr::Grouping { expression } => write!(f, "Grouping({})", expression),
+            Expr::Literal { value } => write!(f, "Literal({:?})", value),
+            Expr::Logical { left, operator, right } => write!(f, "Logical({}, {}, {})", left, operator, right),
+            Expr::Unary { operator, right } => write!(f, "Unary({}, {})", operator, right),
+            Expr::Variable { name } => write!(f, "Variable({})", name.lexeme),
+            Expr::Get { object, name } => write!(f, "Get({}, {})", object, name.lexeme),
+            Expr::Set { object, name, value } => write!(f, "Set({}, {}, {})", object, name.lexeme, value),
+            Expr::Super { method } => write!(f, "Super({})", method.lexeme),
+            Expr::This => write!(f, "This"),
         }
     }
 }

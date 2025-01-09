@@ -1,4 +1,5 @@
 use crate::interpreter::token_type::TokenType;
+use std::fmt;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Token {
@@ -46,5 +47,11 @@ impl From<serde_json::Value> for Literal {
             serde_json::Value::Bool(b) => Literal::Boolean(b),
             _ => Literal::Nil, // Handle other cases
         }
+    }
+}
+
+impl fmt::Display for Token {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{} ({:?})", self.lexeme, self.token_type)
     }
 }
