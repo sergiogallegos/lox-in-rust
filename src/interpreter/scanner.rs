@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use crate::interpreter::token::Token;
 use crate::interpreter::token_type::TokenType;
+use crate::interpreter::token::Literal;
 
 pub struct Scanner {
     source: String,
@@ -50,26 +51,38 @@ impl Scanner {
             '+' => self.add_token(TokenType::Plus),
             ';' => self.add_token(TokenType::Semicolon),
             '*' => self.add_token(TokenType::Star),
-            '!' => self.add_token(if self.match_char('=') {
-                TokenType::BangEqual
-            } else {
-                TokenType::Bang
-            }),
-            '=' => self.add_token(if self.match_char('=') {
-                TokenType::EqualEqual
-            } else {
-                TokenType::Equal
-            }),
-            '<' => self.add_token(if self.match_char('=') {
-                TokenType::LessEqual
-            } else {
-                TokenType::Less
-            }),
-            '>' => self.add_token(if self.match_char('=') {
-                TokenType::GreaterEqual
-            } else {
-                TokenType::Greater
-            }),
+            '!' => {
+                let is_equal = self.match_char('=');
+                self.add_token(if is_equal {
+                    TokenType::BangEqual
+                } else {
+                    TokenType::Bang
+                });
+            }
+            '=' => {
+                let is_equal = self.match_char('=');
+                self.add_token(if is_equal {
+                    TokenType::EqualEqual
+                } else {
+                    TokenType::Equal
+                });
+            }
+            '<' => {
+                let is_equal = self.match_char('=');
+                self.add_token(if is_equal {
+                    TokenType::LessEqual
+                } else {
+                    TokenType::Less
+                });
+            }
+            '>' => {
+                let is_equal = self.match_char('=');
+                self.add_token(if is_equal {
+                    TokenType::GreaterEqual
+                } else {
+                    TokenType::Greater
+                });
+            }
             '/' => {
                 if self.match_char('/') {
                     while self.peek() != '\n' && !self.is_at_end() {
@@ -93,6 +106,7 @@ impl Scanner {
             }
         }
     }
+    
 
     fn identifier(&mut self) {
         while self.peek().is_alphanumeric() || self.peek() == '_' {
@@ -119,7 +133,7 @@ impl Scanner {
         let value: f64 = self.source[self.start..self.current]
             .parse()
             .expect("Failed to parse number");
-        self.add_token_with_literal(TokenType::Number, Some(value));
+        self.add_token_with_literal(TokenType::Number, Some(Literal::Number(value)));
     }
 
     fn string(&mut self) {
@@ -138,7 +152,7 @@ impl Scanner {
         self.advance(); // Closing "
 
         let value = &self.source[self.start + 1..self.current - 1];
-        self.add_token_with_literal(TokenType::String, Some(value.to_string()));
+        self.add_token_with_literal(TokenType::String, Some(Literal::String(value.to_string())));
     }
 
     fn match_char(&mut self, expected: char) -> bool {
@@ -168,10 +182,10 @@ impl Scanner {
     }
 
     fn add_token(&mut self, token_type: TokenType) {
-        self.add_token_with_literal(token_type, None::<T>);
+        self.add_token_with_literal(token_type, None::<Literal>);
     }
 
-    fn add_token_with_literal(&mut self, token_type: TokenType, literal: Option<impl Into<serde_json::Value>>) {
+    fn add_token_with_literal(&mut self, token_type: TokenType, literal: Option<Literal>) {
         let text = self.source[self.start..self.current].to_string();
         self.tokens.push(Token::new(token_type, text, literal, self.line));
     }

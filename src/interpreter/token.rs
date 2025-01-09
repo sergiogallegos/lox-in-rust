@@ -37,3 +37,14 @@ impl Token {
         format!("{:?} {} {}", self.token_type, self.lexeme, literal_string)
     }
 }
+
+impl From<serde_json::Value> for Literal {
+    fn from(value: serde_json::Value) -> Self {
+        match value {
+            serde_json::Value::String(s) => Literal::String(s),
+            serde_json::Value::Number(n) => Literal::Number(n.as_f64().unwrap()), // Example
+            serde_json::Value::Bool(b) => Literal::Boolean(b),
+            _ => Literal::Nil, // Handle other cases
+        }
+    }
+}
