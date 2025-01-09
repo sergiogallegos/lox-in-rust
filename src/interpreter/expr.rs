@@ -2,7 +2,7 @@ use std::fmt;
 use crate::interpreter::token::Token;
 use crate::interpreter::value::Object;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Expr {
     Assign { name: Token, value: Box<Expr> },
     Binary { left: Box<Expr>, operator: Token, right: Box<Expr> },

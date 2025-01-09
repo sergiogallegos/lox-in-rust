@@ -1,7 +1,9 @@
 use crate::interpreter::token_type::TokenType;
 use std::fmt;
+use std::cmp::PartialEq;
+use std::hash::{Hash, Hasher};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Token {
     pub token_type: TokenType,
     pub lexeme: String,
@@ -9,13 +11,39 @@ pub struct Token {
     pub line: usize, // [location]
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub enum Literal {
     Number(f64),
     String(String),
     Boolean(bool),
     Nil,
 }
+
+impl Eq for Literal {}
+
+impl PartialEq for Literal {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Literal::Number(a), Literal::Number(b)) => a == b,
+            (Literal::String(a), Literal::String(b)) => a == b,
+            (Literal::Boolean(a), Literal::Boolean(b)) => a == b,
+            (Literal::Nil, Literal::Nil) => true,
+            _ => false,
+        }
+    }
+}
+
+impl Hash for Literal {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        match self {
+            Literal::Number(value) => value.to_bits().hash(state),
+            Literal::String(value) => value.hash(state),
+            Literal::Boolean(value) => value.hash(state),
+            Literal::Nil => ().hash(state),
+        }
+    }
+}
+
 
 impl Token {
     pub fn new(token_type: TokenType, lexeme: String, literal: Option<Literal>, line: usize) -> Self {

@@ -2,14 +2,13 @@ use std::collections::HashMap;
 use std::rc::Rc;
 use std::cell::RefCell;
 
-use crate::interpreter::environment::Environment;
+use crate::interpreter::environment::{ Environment, Value};
 use crate::interpreter::stmt::{Stmt, StmtVisitor};
-use crate::interpreter::lox_callable::LoxCallable;
 use crate::interpreter::runtime_error::RuntimeError;
 use crate::interpreter::token::Token;
 use crate::interpreter::token_type::TokenType;
 use crate::interpreter::expr::{Expr, ExprVisitor};
-use crate::interpreter::value::Value;
+use crate::interpreter::lox_callable::LoxCallable;
 
 pub struct Interpreter {
     globals: Rc<RefCell<Environment>>,
@@ -23,7 +22,7 @@ impl Interpreter {
 
         // Define a native function "clock"
         globals.borrow_mut().define(
-            "clock".to_string(),
+            "clock",
             Value::Callable(LoxCallable::Native {
                 arity: 0,
                 call: Box::new(|_, _| {
@@ -31,7 +30,7 @@ impl Interpreter {
                     Value::Number(current_time)
                 }),
             }),
-        );
+        )
 
         Self {
             globals: globals.clone(),
